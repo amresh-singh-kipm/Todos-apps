@@ -1,39 +1,81 @@
-import React, { useState } from 'react'
-import { config } from '../utils/constApi'
+import React, { useEffect, useState } from "react";
+import { config } from "../utils/constApi";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../redux/action/TaskAction";
 
 function Login() {
-    const [userInfo,setUserInfo] = useState({email:"",password:""})
-    const signIn = (user) =>{
-        fetch(`${config.host}${config.auth.signIn}`,{
-            method:'POST',
-            headers:config.headers,
-            body:JSON.stringify(user)
-        })
-        .then((resp)=>console.log(resp))
-        .catch((error)=>console.log(error))
-    }
+  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
-    const handleChange = (e) =>{
-        const {name,value} = e.target;
-        setUserInfo({...userInfo,[name]:value})
-    }
-    
-    const onSubmit = (e) =>{
-        e.preventDefault()
-        signIn(userInfo)
-    }
+
+  const dispatch = useDispatch();
+
+  const signIn = (user) => {
+    return fetch(`${config.host}${config.auth.signIn}`, {
+      method: "POST",
+      headers: config.headers,
+      body: JSON.stringify(user),
+    })
+      .then((data) => data.json())
+      .catch((err) => console.log(err));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    signIn(userInfo).then((resp) => {
+      if(resp?.result[0]){
+        if(resp?.result[0]?.role==="STUDENT"){
+            navigate("/student")
+            localStorage.setItem("roleOfUser",resp?.result[0]?.role)
+        dispatch(loginUser(true))
+            return;
+        }
+        if(resp?.result[0]?.role==="TEACHER"){
+            navigate("/teacher")
+            localStorage.setItem("roleOfUser",resp?.result[0]?.role)
+        dispatch(loginUser(true))
+            return;
+        }
+        
+      } 
+      else if(resp==null){
+        dispatch(loginUser(false))
+      }
+      else {
+        dispatch(loginUser(true))
+        navigate("/");
+      }
+    });
+  };
+
 
   return (
     <div>
-        <form>
-            <label htmlFor='email'>Email</label>
-            <input type="email" value={userInfo.email} name="email" onChange={handleChange}/>
-             <label htmlFor='password'>Password</label>
-         <input type="password" value={userInfo.password} name="password" onChange={handleChange}/>
-         <button onClick={onSubmit} >Login</button>
-        </form>
+      <form>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          value={userInfo.email}
+          name="email"
+          onChange={handleChange}
+        />
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          value={userInfo.password}
+          name="password"
+          onChange={handleChange}
+        />
+        <button onClick={onSubmit}>Login</button>
+      </form>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

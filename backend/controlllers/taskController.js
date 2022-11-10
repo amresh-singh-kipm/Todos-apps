@@ -48,7 +48,7 @@ exports.createTaskController = (req, res) => {
     return res.status(400).send("FIELD IS EMPTY");
   }
   // console.log(req.body);
-  let sql = `INSERT INTO TODOS(task,completed) VALUES('${task}',${completed})`;
+  let sql = `INSERT IGNORE INTO TODOS(task,completed) VALUES('${task}',${completed})`;
   db.query(sql, (err, result) => {
     if (err) {
       return console.log(err);

@@ -3,29 +3,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import {
   createTaskClient,
-  getTaskById,
   readTask,
-  updateTask,
   updateTaskClient,
 } from "../redux/action/TaskAction";
 import Home from "./Home";
 
 function CreateTask() {
-  //to update the task
+  // TO GET ID
 
   const location = useLocation();
   const search = new URLSearchParams(location.search);
   const id = search.get("id");
-  const task = search.get("task");
-  const done = search.get("done");
 
-  //to create the task
   const dispatch = useDispatch();
-  const taskToUpdate = useSelector((state) => state);
+
+  //GET ALL TASK FROM REDUX STORE
 
   const tasks = useSelector((state) => state.allTask.tasks);
 
-  console.log("REDUX TASKS", tasks);
   const initialState = {
     task: "",
     completed: false,
@@ -95,7 +90,7 @@ function CreateTask() {
       dispatch(updateTaskClient(id, taskName));
       dispatch(
         readTask(
-          tasks.map((item) =>
+          tasks?.map((item) =>
             item.id == id
               ? {
                   ...item,
@@ -113,29 +108,15 @@ function CreateTask() {
 
   useEffect(() => {
     if (id) {
-      setTaskName({
-        task: task || "",
-        completed: done == 0 ? 0 : 1 || false,
+      let taskToUpdate = tasks?.filter((item) => item.id == id);
+      taskToUpdate?.forEach((element) => {
+        setTaskName({
+          task: element.task || "",
+          completed: element.completed == 0 ? 0 : 1 || false,
+        });
       });
     }
   }, []);
-
-  // useEffect(() => {
-  //   setTaskName({})
-  //   // readTaskById(id)
-  //   if (id) {
-  //     dispatch(getTaskById(id))
-  //     taskToUpdate?.forEach((element) => {
-  //       if(element.id == id){
-  //         setTaskName({
-  //           task: element?.task || "",
-  //           completed: element?.completed || false,
-  //         });
-  //       }
-  //     });
-  //   }
-  // }, []);
-  console.log("single data", taskName);
 
   return (
     <div>

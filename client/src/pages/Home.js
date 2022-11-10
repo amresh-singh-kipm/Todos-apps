@@ -63,13 +63,7 @@ function Home() {
                   <td>{task}</td>
                   <td>{completed}</td>
                   <td>
-                    <button
-                      onClick={() =>
-                        navigate(
-                          `/createtask/?id=${id}&task=${task}&done=${completed}`
-                        )
-                      }
-                    >
+                    <button onClick={() => navigate(`/createtask/?id=${id}`)}>
                       Update
                     </button>{" "}
                   </td>

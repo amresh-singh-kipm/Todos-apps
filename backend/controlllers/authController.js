@@ -7,8 +7,8 @@ exports.signInUserController = (req, res) => {
   const regax =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   // console.log(req.body);
-  let sql = `SELECT * FROM user_info WHERE password= '${password}'`;
-  if (email.toLowerCase().match(regax)) {
+  let sql = `SELECT * FROM user_info WHERE email='${email}' AND password= '${password}'`;
+  if (email?.match(regax)) {
     if (password == "") {
       res.status(400).send("PASSWORD FIELD IS EMPTY");
       return;
@@ -27,7 +27,7 @@ exports.signInUserController = (req, res) => {
         });
       });
     });
-  } else if (email == "") {
+  } else if (email == ""||email==undefined) {
     res.status(400).send("PROVIDE EMAIL");
   } else {
     res.status(404).send("INVALID EMAIL");
@@ -37,7 +37,7 @@ exports.signInUserController = (req, res) => {
 exports.signUpUserController = (req, res) => {
   const { name, email, password } = req.body;
   console.log(req.body);
-  let sql = `INSERT INTO user_info(name,email,password) VALUES('${name}','${email}','${password}')`;
+  let sql = `INSERT INTO user_info(name,email,password,role) VALUES('${name}','${email}','${password}',"STUDENT")`;
   db.query(sql, (err, result) => {
     if (err) {
       return console.log(err);
@@ -45,3 +45,5 @@ exports.signUpUserController = (req, res) => {
     return res.send("Account is created successfully");
   });
 };
+
+

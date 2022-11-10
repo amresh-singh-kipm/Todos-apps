@@ -30,6 +30,13 @@ export const deleteTask = (task) => {
   };
 };
 
+export const loginUser = (user) =>{
+  return{
+    type:ActionType.ISLOGIN,
+    payload:user
+  }
+}
+
 
 
 //API ROUTES
@@ -39,8 +46,6 @@ export const getTask = () => {
     // debugger;
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source()
-    console.log(source.token)
-    
     axios.get(`${config.host}${config.task.read}`,{
       cancelToken:source.token,
     })

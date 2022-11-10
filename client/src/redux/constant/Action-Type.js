@@ -3,4 +3,5 @@ export const ActionType = {
   DELETE_TASK: "DELETE_TASK",
   UPDATE_TASK: "UPDATE_TASK",
   READ_TASK: "READ_TASK",
+  ISLOGIN: "ISLOGIN",
 };

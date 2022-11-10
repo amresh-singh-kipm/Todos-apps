@@ -1,14 +1,51 @@
-import React from 'react'
-import PublicRoute from './helper/router/PublicRoute'
-import CreateTask from './pages/CreateTask'
-import TodosTask from './pages/Home'
+import React, { useEffect, useState } from "react";
+import OpenRoute from "./helper/router/OpenRoute";
+import PublicRoute from "./helper/router/PublicRoute";
+import TeacherRoute from "./helper/router/TeacherRoute";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  let roleOfUser = localStorage?.getItem("roleOfUser");
+  const [routeForStudent, setRouteForStudent] = useState(false);
+  const [routeForTeacher, setRouteForTeacher] = useState(false);
+  const [routeForOpen, setRouteForOpen] = useState(false);
+  const isLogin = useSelector((state) => state?.userLogin);
+
+  const routesForUser = () => {
+    if (roleOfUser === "STUDENT") {
+      setRouteForStudent(true);
+      setRouteForTeacher(false);
+      setRouteForOpen(false);
+      console.log("route for student is ::", routeForStudent);
+      return;
+    }
+
+    if (roleOfUser === "TEACHER") {
+      setRouteForTeacher(true);
+      setRouteForStudent(false);
+      setRouteForOpen(false);
+      console.log("route for student is ::", routeForTeacher);
+
+      return;
+    }
+    if (roleOfUser === "" || roleOfUser === undefined || roleOfUser===null) {
+      setRouteForOpen(true);
+      setRouteForStudent(false);
+      setRouteForTeacher(false);
+      return;
+    }
+  };
+
+  useEffect(() => {
+    routesForUser();
+  }, [isLogin]);
+
   return (
     <div>
-        <PublicRoute/>
+      {routeForStudent ? <PublicRoute /> : null}
+      {routeForTeacher ? <TeacherRoute /> : null}
+      {routeForOpen ? <OpenRoute /> : null}
     </div>
-  )
-}
-
-export default App
+  );
+};
+export default App;
