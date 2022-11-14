@@ -3,6 +3,7 @@ import OpenRoute from "./helper/router/OpenRoute";
 import PublicRoute from "./helper/router/PublicRoute";
 import TeacherRoute from "./helper/router/TeacherRoute";
 import { useSelector } from "react-redux";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   let roleOfUser = localStorage?.getItem("roleOfUser");
@@ -19,13 +20,11 @@ const App = () => {
       console.log("route for student is ::", routeForStudent);
       return;
     }
-
     if (roleOfUser === "TEACHER") {
       setRouteForTeacher(true);
       setRouteForStudent(false);
       setRouteForOpen(false);
       console.log("route for student is ::", routeForTeacher);
-
       return;
     }
     if (roleOfUser === "" || roleOfUser === undefined || roleOfUser===null) {
@@ -42,9 +41,11 @@ const App = () => {
 
   return (
     <div>
+      <ErrorBoundary>
       {routeForStudent ? <PublicRoute /> : null}
       {routeForTeacher ? <TeacherRoute /> : null}
       {routeForOpen ? <OpenRoute /> : null}
+      </ErrorBoundary>
     </div>
   );
 };

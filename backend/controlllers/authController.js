@@ -20,12 +20,18 @@ exports.signInUserController = (req, res) => {
       if (result.length == 0) {
         return res.status(401).send("EMAIL OR PASSWORD IS  INCORRECT");
       }
-      return jwt.sign({ user: result }, "secretkey", (err, token) => {
-        res.json({
-          token,
-          result,
-        });
+      let token= jwt.sign({ user: result }, "SECRET_KEY", { expiresIn: 30000 })
+      // console.log("DO WE HAVE TOKEN???",token)  
+      return res.json({
+        token,
+        result,
       });
+      // return jwt.sign({ user: result }, "secretkey",{expiresIn:"1h"}, (err, token) => {
+      //   res.json({
+      //     token,
+      //     result,
+      //   });
+      // });
     });
   } else if (email == ""||email==undefined) {
     res.status(400).send("PROVIDE EMAIL");

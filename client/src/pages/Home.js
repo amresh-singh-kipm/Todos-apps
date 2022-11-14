@@ -6,7 +6,6 @@ import {
   getTask,
   readTask,
 } from "../redux/action/TaskAction";
-import { config } from "../utils/constApi";
 
 function Home() {
   const dispatch = useDispatch();
@@ -24,7 +23,7 @@ function Home() {
   // };
 
   useEffect(() => {
-    getTask();
+    // getTask();
     dispatch(getTask());
   }, [deleteItem]);
 
@@ -53,7 +52,8 @@ function Home() {
             <th>Action</th>
           </tr>
         </thead>
-        {allTask?.length > 0 ? (
+        {
+        // allTask?.length > 0 ? (
           allTask?.map((item) => {
             const { task, id, completed } = item;
             return (
@@ -74,16 +74,19 @@ function Home() {
               </tbody>
             );
           })
-        ) : (
-          // console.log("data for home",allTask)
-          <tbody style={{ textAlign: "center" }}>
-            <tr>
-              <td></td>
-              <td>{allTask?.task}</td>
-              <td>{allTask?.completed}</td>
-            </tr>
-          </tbody>
-        )}
+        // ) 
+        // : 
+        // (
+        //   // console.log("data for home",allTask)
+        //   <tbody style={{ textAlign: "center" }}>
+        //     <tr>
+        //       <td></td>
+        //       <td>{allTask?.task}</td>
+        //       <td>{allTask?.completed}</td>
+        //     </tr>
+        //   </tbody>
+        // )
+        }
       </table>
     </div>
   );

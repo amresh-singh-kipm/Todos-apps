@@ -30,16 +30,18 @@ function Login() {
     e.preventDefault();
     signIn(userInfo).then((resp) => {
       if(resp?.result[0]){
-        if(resp?.result[0]?.role==="STUDENT"){
-            navigate("/student")
-            localStorage.setItem("roleOfUser",resp?.result[0]?.role)
-        dispatch(loginUser(true))
+          if(resp?.result[0]?.role==="STUDENT"){
+              navigate("/student")
+              localStorage.setItem("roleOfUser",resp?.result[0]?.role)
+              dispatch(loginUser(true))
+              localStorage.setItem("token",resp.token)
             return;
         }
         if(resp?.result[0]?.role==="TEACHER"){
             navigate("/teacher")
             localStorage.setItem("roleOfUser",resp?.result[0]?.role)
         dispatch(loginUser(true))
+        localStorage.setItem("token",resp.token)
             return;
         }
         
@@ -49,6 +51,7 @@ function Login() {
       }
       else {
         dispatch(loginUser(true))
+        localStorage.setItem("token",resp.token)
         navigate("/");
       }
     });

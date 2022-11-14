@@ -44,14 +44,14 @@ export const loginUser = (user) =>{
 export const getTask = () => {
   return (dispatch) => {
     // debugger;
-    const cancelToken = axios.CancelToken;
-    const source = cancelToken.source()
-    axios.get(`${config.host}${config.task.read}`,{
-      cancelToken:source.token,
-    })
-    // fetch(`${config.host}${config.task.read}`)
-    //   .then((res) => res.json())
-      .then((resp) => dispatch(readTask(resp.data)))
+    // const cancelToken = axios.CancelToken;
+    // const source = cancelToken.source()
+    // axios.get(`${config.host}${config.task.read}`,{
+    //   cancelToken:source.token,
+    // })
+    fetch(`${config.host}${config.task.read}`)
+      .then((res) => res.json())
+      .then((resp) => dispatch(readTask(resp)))
       .catch((error)=>console.log(error))
       
       // controller .abort();

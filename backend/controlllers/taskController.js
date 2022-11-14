@@ -1,15 +1,34 @@
+const { resolve } = require("path");
 const { db } = require("../database/dataBase");
 
 //FUNCTION TO READ TASK
 
-exports.readTaskController = (req, res) => {
+const sqlToRead = (sql) =>{
+  return new Promise((resolve,reject)=>{
+    db.query(sql,(err,result)=>{
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+      })
+  })
+//  return db.query(sql,(err,result)=>{
+//   if (err) {
+//     return console.log(err);
+//   }
+//   return result;
+//   })
+}
+exports.readTaskController = async (req, res) => {
   let sql = "SELECT * FROM TODOS";
-  db.query(sql, (err, result) => {
-    if (err) {
-      return console.log(err);
-    }
-    return res.send(result);
-  });
+  let task = await sqlToRead(sql)
+  res.send(task)
+//  await db.query(sql, (err, result) => {
+//     if (err) {
+//       return console.log(err);
+//     }
+//     return res.send(result);
+//   });
 };
 
 //FUNCTION TO READ TASK BY ID
@@ -27,7 +46,7 @@ exports.readTaskByIdController = (req, res) => {
 //FUNCTION TO DELETE THE TASK
 
 exports.deleteTaskByIdController = (req, res) => {
-  // console.log("ID::::", req.params.tid);
+  console.log("ID::::", req.params.tid);
   let sql = `DELETE FROM TODOS WHERE id = ${req.params.tid}`;
   db.query(sql, (err, result) => {
     if (err) {
@@ -48,7 +67,7 @@ exports.createTaskController = (req, res) => {
     return res.status(400).send("FIELD IS EMPTY");
   }
   // console.log(req.body);
-  let sql = `INSERT IGNORE INTO TODOS(task,completed) VALUES('${task}',${completed})`;
+  let sql = `INSERT INTO TODOS(task,completed) VALUES('${task}',${completed})`;
   db.query(sql, (err, result) => {
     if (err) {
       return console.log(err);
@@ -60,6 +79,7 @@ exports.createTaskController = (req, res) => {
 //FUNCTION TO UPDATE TASK
 
 exports.updateTaskController = (req, res) => {
+  
   const { task, completed } = req.body;
   if (
    ( task == undefined || task == "") ||
